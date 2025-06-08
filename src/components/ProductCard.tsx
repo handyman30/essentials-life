@@ -14,12 +14,12 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden bg-gray-50">
         <div className="absolute inset-0 flex items-center justify-center text-4xl">
-          {product.category === 'shoes' && '👟'}
-          {product.category === 'laptops' && '💻'}
-          {product.category === 'watches' && '⌚'}
-          {product.category === 'cars' && '🚗'}
-          {product.category === 'tech' && '📱'}
-          {product.category === 'style' && '👔'}
+          {product.category === "shoes" && "👟"}
+          {product.category === "laptops" && "💻"}
+          {product.category === "watches" && "⌚"}
+          {product.category === "cars" && "🚗"}
+          {product.category === "tech" && "📱"}
+          {product.category === "style" && "👔"}
         </div>
         
         {/* Price badge */}

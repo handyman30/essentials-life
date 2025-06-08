@@ -81,7 +81,7 @@ export default function Home() {
         {/* Products Grid */}
         <section>
           <h2 className="text-2xl font-semibold text-black mb-8 text-center">
-            {selectedCategory ? 'Featured Products' : 'Trending Essentials'}
+            {selectedCategory ? "Featured Products" : "Trending Essentials"}
           </h2>
           
           {filteredProducts.length > 0 ? (
