@@ -39,6 +39,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 This app is optimized for Railway deployment with automatic builds and health checks.
 
+**Latest Deploy**: June 8, 2025 - ESLint fixes applied ✅
+
 ---
 
 **EssentialsDash - Discover. Click. Buy.**
