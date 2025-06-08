@@ -97,7 +97,7 @@ export default function Home() {
                 No products yet
               </h3>
               <p className="text-gray-500">
-                We're curating the best {selectedCategory} for you. Check back soon!
+                We&apos;re curating the best {selectedCategory} for you. Check back soon!
               </p>
             </div>
           )}
