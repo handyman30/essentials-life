@@ -1,102 +1,136 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
+import CategoryCard from '@/components/CategoryCard';
+import ProductCard from '@/components/ProductCard';
+import { categories, products } from '@/data/essentials';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleCategoryClick = (categoryId: string) => {
+    setSelectedCategory(selectedCategory === categoryId ? null : categoryId);
+  };
+
+  const filteredProducts = selectedCategory
+    ? products.filter(product => product.category === selectedCategory)
+    : products.slice(0, 6); // Show first 6 products when no category selected
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="pt-16 pb-12 px-4 text-center">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl md:text-6xl font-bold text-black mb-4">
+            EssentialsDash
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-700 mb-3">
+            What You Looking For?
+          </p>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Discover curated essentials across shoes, tech, watches, cars & more. 
+            Get instant access to the best picks with direct buy links.
+          </p>
         </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 pb-16">
+        {/* Categories Grid */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold text-black mb-8 text-center">
+            Browse Categories
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {categories.map((category) => (
+              <CategoryCard
+                key={category.id}
+                category={category}
+                onClick={handleCategoryClick}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Selected Category Info */}
+        {selectedCategory && (
+          <section className="mb-8">
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-black mb-2">
+                    {categories.find(c => c.id === selectedCategory)?.name} Collection
+                  </h3>
+                  <p className="text-gray-600">
+                    Curated picks from top brands
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSelectedCategory(null)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Products Grid */}
+        <section>
+          <h2 className="text-2xl font-semibold text-black mb-8 text-center">
+            {selectedCategory ? 'Featured Products' : 'Trending Essentials'}
+          </h2>
+          
+          {filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                No products yet
+              </h3>
+              <p className="text-gray-500">
+                We're curating the best {selectedCategory} for you. Check back soon!
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* CTA Section */}
+        <section className="mt-20 text-center">
+          <div className="bg-black rounded-xl p-8 text-white">
+            <h3 className="text-2xl font-semibold mb-4">
+              Want More Curated Picks?
+            </h3>
+            <p className="text-lg mb-6 text-gray-300">
+              Get notified when we add new essentials to your favorite categories
+            </p>
+            <button className="bg-white text-black font-medium px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+              Get Notified
+            </button>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center text-gray-600">
+            <p className="mb-2 font-medium">
+              EssentialsDash - Discover. Click. Buy.
+            </p>
+            <p className="text-sm">
+              Affiliate links help us curate the best products for you.
+            </p>
+          </div>
+        </div>
       </footer>
     </div>
   );
